@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="admin_style.css">
+
+<!--    FIREBASE SCRIPT -->
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/5.11.1/firebase-app.js"></script>
+    
+<!-- TODO: Add SDKs for Firebase products that you want to use 
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+     <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-storage.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>     
+     <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
+
+<script>
+// Your web app's Firebase configuration>
+  var firebaseConfig = {
+    apiKey: "AIzaSyCNFelgMXqVWAIIkt6XAWLhX0TT9XAttnQ",
+    authDomain: "placement-d8d13.firebaseapp.com",
+    databaseURL: "https://placement-d8d13.firebaseio.com",
+    projectId: "placement-d8d13",
+    storageBucket: "placement-d8d13.appspot.com",
+    messagingSenderId: "98734404464",
+    appId: "1:98734404464:web:7141f5e145fb0583"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  var database=firebase.database();
+
+</script>
+
+<script>
+        var query = database.ref().child('Drives/');    //Referance of Drives
+        var k=-1;  
+        query.once("value").then(function(snapshot){
+        snapshot.forEach(function(childSnapshot){
+            var i = childSnapshot.key;              //child values(mmdd)
+            var q= database.ref().child('Drives/'+i+'/');   //Refernce of Drives->values(mmdd)
+            //alert(q);
+            var newdiv = document.createElement("div");
+            newdiv.className = "card";                      //creating div for each value
+            document.getElementsByClassName("leftcolumn")[0].appendChild(newdiv);
+
+                 q.once("value").then(function(snapshot){
+                 snapshot.forEach(function(childSnapshot){
+                 var j= childSnapshot.key;              //j= company or date or url
+                 if(j=="COMPANY"){
+                    // alert(k)
+                     k=k+1;
+                    var childData = childSnapshot.val();
+                    var x = document.getElementsByClassName("card");
+                    x[k].innerHTML+=("<b>COMPANY NAME :"+childData +"</b><br/><br/>");
+                 }
+                else  
+                    if(j=="Date")
+                    {
+                        var childData = childSnapshot.val();
+                        var x = document.getElementsByClassName("card");
+                        x[k].innerHTML+=("Date(yyyy-mm-dd) :"+childData+"<br/><br/>");
+                    }
+                    else 
+                        if(j=="URL")
+                        {
+                            var childData=childSnapshot.val();
+                            var x = document.getElementsByClassName("card");
+                            x[k].innerHTML+=("URL :"+"<a href="+childData+">"+childData+"</a><br/><br/>");
+                        }
+                        else
+                            if(j=="files")
+                                {
+                                    var n;
+                                    var x = document.getElementsByClassName("card");
+                                    x[k].innerHTML+=("Files:<br/>");
+                                    var z=database.ref().child('Drives/'+i+'/'+j+'/');
+                                    n=k;
+                                    z.once("value").then(function(snapshot){
+                                        snapshot.forEach(function(childSnapshot){
+                                            var name=childSnapshot.key;
+                                            var childData=childSnapshot.val();
+                                            x[n].innerHTML+=("<a href="+childData+">"+name+"</a><br/>");
+                                            })                                        
+                                    })
+                                   // alert(k);
+                                }
+                    })
+                })
+            })
+        })
+
+
+/*function for loader*/
+var myVar;
+function myFunction() {
+myVar = setTimeout(showPage, 1000);
+}
+
+function showPage() {
+document.getElementById("loader").style.display = "none";
+//document.getElementById("myDiv").style.display = "block";
+}
+
+</script>
+
+
+</head>
+
+<body onload="myFunction()">
+
+    <div class="header">
+        <img src="logo.jpg" width="1000" height="300"></div>
+    </div>
+    </br>
+    <div class="marq">
+        <marquee width="75%" direction="right" height="75%"> <b>CHECK OUT THE LATEST UPDATES ABOUT PLACEMENTS</b>   
+                </marquee>
+    </div>
+    <div class="row">
+            <div class="leftcolumn">
+                  <div id="loader"></div>
+            </div>
+
+                <!--Here all the details are fecthed and displayed-->
+
+            <div class="rightcolumn">
+                
+                    <div class="cardr">
+                        <h2><a href="http://cvr.ac.in/home4/index.php/placements-2019" style="color:rgb(0, 0, 0)">
+                                    Record Placements for 2018-2019 batch<a></h2></br>
+                        <h3>Visit Our Website</h3>
+                        <img src="web.png" width="25px" height="25px"></img>&nbsp&nbsp<a  href="http://cvr.ac.in/home4/" style="color:rgb(0, 0, 0)">
+                                    <b>CVR COLLLEGE OF ENGINEERING</b></a>                       
+                    </div>
+
+                
+                <!--Contact US-->
+                <div class="cardr">
+                    <h2>Contact Us</h2>
+                    <img src="call.png" width="20px" height="20px"><b>&nbsp 08414661601 </b></img></br>
+                    <img src="mail.png" width="18px" height="18px"><b>&nbsp  E-Mail </b></img></br>
+                    <strong>&nbsp&nbsp&nbsp&nbsp&nbsp principal@cvr.ac.in</strong></br>
+                    <strong>&nbsp&nbsp&nbsp&nbsp&nbsp placement@cvr.ac.in</strong>
+                    <h2>Follow Us</h2>
+                    <img src="twitter.png" width="30px" height="30px">&nbsp&nbsp<b>@cvrcoenews </b></img>
+                </div>
+            </div>
+        </div>
+              
+        <div class="footer">
+                <h3>Copyrights &copy2019 CVR College of Engineering,All rights Reseverd</h3>
+        </div>
+              
+</body>
+</html>
